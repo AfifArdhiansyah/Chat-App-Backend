@@ -1,7 +1,7 @@
 const e = require('express');
 const userRepository = require('../repositories/userRepository');
 
-userService = {
+const userService = {
     // Get all users
     getAllUsers : async () =>{
         try{
