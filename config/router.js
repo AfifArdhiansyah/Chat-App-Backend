@@ -3,11 +3,12 @@ const userController = require('../app/controllers/userController');
 const friendController = require('../app/controllers/friendController');
 const conversationController = require('../app/controllers/conversationController');
 const authController = require('../app/controllers/authController');
+const path = require('path');
 
 const prefix = "/api/v1";
 
 router.get("/", (req, res) => {
-    res.send("Hello World!");
+    res.sendFile(path.join(__dirname + "../../views/index.html"));
 });
 
 //auth middleware
