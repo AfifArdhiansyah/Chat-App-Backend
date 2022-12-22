@@ -2,15 +2,27 @@ const router = require('express').Router();
 const userController = require('../app/controllers/userController');
 const friendController = require('../app/controllers/friendController');
 const conversationController = require('../app/controllers/conversationController');
+const authController = require('../app/controllers/authController');
+const path = require('path');
 
 const prefix = "/api/v1";
 
 router.get("/", (req, res) => {
-    res.send("Hello World!");
+    res.sendFile(path.join(__dirname + "../../views/index.html"));
 });
 
+//auth middleware
+const authMiddleware = require('../app/middleware/authMiddleware');
+
+//auth endpoints
+router.post(`${prefix}/auth/register`, authController.register);
+router.post(`${prefix}/auth/login`, authController.login);
+
 //users endpoints
-router.get(`${prefix}/users`, userController.getAllUsers);
+router.get(`${prefix}/users`, 
+    authMiddleware.verifyToken,
+    userController.getAllUsers
+);
 router.get(`${prefix}/users/:id`, userController.getUserById);
 router.get(`${prefix}/users/user/:username`, userController.getUserByUsername)
 router.post(`${prefix}/users`, userController.createUser);
