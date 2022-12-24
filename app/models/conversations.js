@@ -12,6 +12,14 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       this.hasMany(models.chats, {
         foreignKey: 'conversation_id',
+      }),
+      this.belongsTo(models.users, {
+        foreignKey: 'user1',
+        as: 'user1_conversation',
+      }),
+      this.belongsTo(models.users, {
+        foreignKey: 'user2',
+        as: 'user2_conversation',
       })
     }
   }
