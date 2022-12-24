@@ -6,7 +6,8 @@ const conversationController = {
     //get conversation by user id
     getConversationByUserId : async (req, res) => {
         try{
-            const conversations = await conversationService.getAllConversationByUserId(req.params.id);
+            const user = req.user;
+            const conversations = await conversationService.getAllConversationByUserId(user.id);
             if(!conversations){
                 return res.status(404).json({
                     status: 'fail',
@@ -35,8 +36,9 @@ const conversationController = {
     createConversation : async (req, res) => {
         try{
             const {receiver, message} = req.body;
+            const user = req.user;
             const conversation = await conversationService.createConversation({
-                user1: req.params.id,
+                user1: user.id,
                 user2: receiver
             });
             const chat = await chatService.createChat({
@@ -65,8 +67,8 @@ const conversationController = {
         try{
             const receiver = req.body.receiver;
             const message = req.body.message;
-            const sender = req.params.id;
-            let conversation = await conversationService.getOneConversationByUserId(sender);
+            const sender = req.user.id;
+            let conversation = await conversationService.getOneConversationByUserId(sender, receiver);
             if(sender == receiver){
                 return res.status(400).json({
                     status: 'fail',
@@ -74,6 +76,7 @@ const conversationController = {
                     data: {}
                 });
             }
+            console.log(conversation);
             if(!conversation){
                 conversation = await conversationService.createConversation({
                     id: uuidv4(),

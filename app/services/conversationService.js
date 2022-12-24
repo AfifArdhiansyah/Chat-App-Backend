@@ -12,9 +12,9 @@ const conversationService = {
     },
 
     //get one conversation by user id
-    getOneConversationByUserId : async (id) => {
+    getOneConversationByUserId : async (sender, receiver) => {
         try{
-            return await conversationRepository.getOneConversationByUserId(id);
+            return await conversationRepository.getOneConversationByUserId(sender, receiver);
         }
         catch(err){
             throw err;
