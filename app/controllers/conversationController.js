@@ -1,13 +1,16 @@
 const conversationService = require('../services/conversationService');
 const {v4: uuidv4} = require('uuid');
+const jwt = require('jsonwebtoken');
 const chatService = require('../services/chatService');
+const userService = require('../services/userService');
 
 const conversationController = {
     //get conversation by user id
     getConversationByUserId : async (req, res) => {
         try{
-            const user = req.user;
-            const conversations = await conversationService.getAllConversationByUserId(user.id);
+            const reqUser = req.user;
+            const user = await userService.getUserById(reqUser.id);
+            let conversations = await conversationService.getAllConversationByUserId(reqUser.id);
             if(!conversations){
                 return res.status(404).json({
                     status: 'fail',
@@ -19,7 +22,7 @@ const conversationController = {
                 return res.status(200).json({
                     status: 'success',
                     message: 'Conversation found',
-                    data: conversations
+                    data: {conversations, user}
                 });
             }
         }
