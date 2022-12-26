@@ -35,6 +35,36 @@ const conversationController = {
         }
     },
 
+    //get conversation by id
+    getConversationById : async (req, res) => {
+        try{
+            const id = req.params.id;
+            const user = await userService.getUserById(req.user.id);;
+            const conversation = await conversationService.getConversationById(id);
+            if(!conversation){
+                return res.status(404).json({
+                    status: 'fail',
+                    message: 'No conversation found',
+                    data: {}
+                });
+            }
+            else{
+                return res.status(200).json({
+                    status: 'success',
+                    message: 'Conversation found',
+                    data: {conversation, user}
+                });
+            }
+        }
+        catch(err){
+            res.status(500).json({
+                status: 'fail',
+                message: 'Internal server error',
+                data: err
+            });
+        }
+    },
+
     //new conversation
     createConversation : async (req, res) => {
         try{

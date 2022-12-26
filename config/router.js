@@ -39,6 +39,7 @@ router.delete(`${prefix}/friends/:id`, friendController.deleteFriend);
 
 //conversations endpoints
 router.get(`${prefix}/conversations/user`, authMiddleware.verifyToken, conversationController.getConversationByUserId);
+router.get(`${prefix}/conversations/:id`, authMiddleware.verifyToken, conversationController.getConversationById);
 router.put(`${prefix}/conversations/user`, authMiddleware.verifyToken, conversationController.updateConversation);
 
 module.exports = router;

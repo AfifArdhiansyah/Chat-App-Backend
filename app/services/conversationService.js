@@ -21,6 +21,16 @@ const conversationService = {
         }
     },
 
+    //get conversation by id
+    getConversationById : async (id) => {
+        try{
+            return await conversationRepository.getConversationById(id);
+        }
+        catch(err){
+            throw err;
+        }
+    },
+
     //new conversation
     createConversation : async (conversation) => {
         try{

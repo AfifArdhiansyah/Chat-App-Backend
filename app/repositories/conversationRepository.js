@@ -53,6 +53,36 @@ const conversationRepository = {
         });
     },
 
+    //get conversation by id
+    getConversationById : async (id) => {
+        return await conversations.findByPk(id,{
+            include: [{
+                model : users,
+                as: 'user1_conversation',
+                attributes: {
+                    exclude: ['password', 'createdAt', 'updatedAt']
+                }
+            },{
+                model : users,
+                as: 'user2_conversation',
+                attributes: {
+                    exclude: ['password', 'createdAt', 'updatedAt']
+                }
+            },{
+                model : chats,
+                attributes: {
+                    exclude: ['id','updatedAt', 'conversation_id']
+                },
+                order: [
+                    ['createdAt', 'ASC']
+                ]
+            }],
+            order: [
+                ['updatedAt', 'ASC']
+            ],
+        })
+    },
+
     //new conversation
     createConversation : async (conversation) => {
         return await conversations.create(conversation);
