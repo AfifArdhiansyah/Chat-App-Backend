@@ -1,13 +1,16 @@
 const conversationService = require('../services/conversationService');
 const {v4: uuidv4} = require('uuid');
+const jwt = require('jsonwebtoken');
 const chatService = require('../services/chatService');
+const userService = require('../services/userService');
 
 const conversationController = {
     //get conversation by user id
     getConversationByUserId : async (req, res) => {
         try{
-            const user = req.user;
-            const conversations = await conversationService.getAllConversationByUserId(user.id);
+            const reqUser = req.user;
+            const user = await userService.getUserById(reqUser.id);
+            let conversations = await conversationService.getAllConversationByUserId(reqUser.id);
             if(!conversations){
                 return res.status(404).json({
                     status: 'fail',
@@ -19,7 +22,37 @@ const conversationController = {
                 return res.status(200).json({
                     status: 'success',
                     message: 'Conversation found',
-                    data: conversations
+                    data: {conversations, user}
+                });
+            }
+        }
+        catch(err){
+            res.status(500).json({
+                status: 'fail',
+                message: 'Internal server error',
+                data: err
+            });
+        }
+    },
+
+    //get conversation by id
+    getConversationById : async (req, res) => {
+        try{
+            const id = req.params.id;
+            const user = await userService.getUserById(req.user.id);;
+            const conversation = await conversationService.getConversationById(id);
+            if(!conversation){
+                return res.status(404).json({
+                    status: 'fail',
+                    message: 'No conversation found',
+                    data: {}
+                });
+            }
+            else{
+                return res.status(200).json({
+                    status: 'success',
+                    message: 'Conversation found',
+                    data: {conversation, user}
                 });
             }
         }
@@ -76,7 +109,6 @@ const conversationController = {
                     data: {}
                 });
             }
-            console.log(conversation);
             if(!conversation){
                 conversation = await conversationService.createConversation({
                     id: uuidv4(),
@@ -91,6 +123,8 @@ const conversationController = {
                 text: message,
                 conversation_id: conversation.id,
             });
+            conversation.dataValues.updatedAt = new Date();
+            conversation = await conversationService.updateConversation(conversation.dataValues);
             return res.status(200).json({
                 status: 'success',
                 message: 'Conversation updated',

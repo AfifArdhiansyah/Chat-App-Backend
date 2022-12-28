@@ -27,13 +27,11 @@ const conversationRepository = {
                 model : chats,
                 attributes: {
                     exclude: ['id','updatedAt', 'conversation_id']
-                },
-                order: [
-                    ['createdAt', 'ASC']
-                ]
+                }
             }],
             order: [
-                ['updatedAt', 'ASC']
+                ['updatedAt', 'DESC'],
+                [chats, 'createdAt', 'ASC']
             ],
         });
     },
@@ -51,6 +49,34 @@ const conversationRepository = {
                 ['updatedAt', 'ASC']
             ],
         });
+    },
+
+    //get conversation by id
+    getConversationById : async (id) => {
+        return await conversations.findByPk(id,{
+            include: [{
+                model : users,
+                as: 'user1_conversation',
+                attributes: {
+                    exclude: ['password', 'createdAt', 'updatedAt']
+                }
+            },{
+                model : users,
+                as: 'user2_conversation',
+                attributes: {
+                    exclude: ['password', 'createdAt', 'updatedAt']
+                }
+            },{
+                model : chats,
+                attributes: {
+                    exclude: ['id','updatedAt', 'conversation_id']
+                }
+            }],
+            order: [
+                ['updatedAt', 'ASC'],
+                [chats, 'createdAt', 'ASC']
+            ],
+        })
     },
 
     //new conversation
