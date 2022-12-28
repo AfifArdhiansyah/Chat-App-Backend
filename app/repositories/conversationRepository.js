@@ -27,13 +27,11 @@ const conversationRepository = {
                 model : chats,
                 attributes: {
                     exclude: ['id','updatedAt', 'conversation_id']
-                },
-                order: [
-                    ['createdAt', 'ASC']
-                ]
+                }
             }],
             order: [
-                ['updatedAt', 'ASC']
+                ['updatedAt', 'DESC'],
+                [chats, 'createdAt', 'ASC']
             ],
         });
     },
@@ -72,13 +70,11 @@ const conversationRepository = {
                 model : chats,
                 attributes: {
                     exclude: ['id','updatedAt', 'conversation_id']
-                },
-                order: [
-                    ['createdAt', 'ASC']
-                ]
+                }
             }],
             order: [
-                ['updatedAt', 'ASC']
+                ['updatedAt', 'ASC'],
+                [chats, 'createdAt', 'ASC']
             ],
         })
     },

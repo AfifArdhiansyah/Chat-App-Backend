@@ -109,7 +109,6 @@ const conversationController = {
                     data: {}
                 });
             }
-            console.log(conversation);
             if(!conversation){
                 conversation = await conversationService.createConversation({
                     id: uuidv4(),
@@ -124,6 +123,8 @@ const conversationController = {
                 text: message,
                 conversation_id: conversation.id,
             });
+            conversation.dataValues.updatedAt = new Date();
+            conversation = await conversationService.updateConversation(conversation.dataValues);
             return res.status(200).json({
                 status: 'success',
                 message: 'Conversation updated',
