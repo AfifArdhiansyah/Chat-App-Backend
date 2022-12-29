@@ -31,11 +31,11 @@ router.delete(`${prefix}/users/:id`, userController.deleteUser);
 
 //friends endpoints
 router.get(`${prefix}/friends`, friendController.getAllFriends);
-router.get(`${prefix}/friends/:id`, friendController.getFriendById);
-router.get(`${prefix}/friends/user/:userid`, friendController.getFriendByUserId);
+router.get(`${prefix}/friends/id/:id`, friendController.getFriendById);
+router.get(`${prefix}/friends/user`, authMiddleware.verifyToken, friendController.getFriendByUserId);
 router.post(`${prefix}/friends`, friendController.createFriend);
-router.put(`${prefix}/friends/:id`, friendController.updateFriend);
-router.delete(`${prefix}/friends/:id`, friendController.deleteFriend);
+router.put(`${prefix}/friends/id/:id`, friendController.updateFriend);
+router.delete(`${prefix}/friends/id/:id`, friendController.deleteFriend);
 
 //conversations endpoints
 router.get(`${prefix}/conversations/user`, authMiddleware.verifyToken, conversationController.getConversationByUserId);
