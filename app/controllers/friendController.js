@@ -61,7 +61,8 @@ const friendController = {
     // Get one friend by userid
     getFriendByUserId : async (req, res) => {
         try{
-            const friend = await friendService.getFriendByUserId(req.params.userid);
+            const reqUser = req.user;
+            const friend = await friendService.getFriendByUserId(reqUser.id);
             if(friend === null){
                 return res.status(404).json({
                     status : 'fail',

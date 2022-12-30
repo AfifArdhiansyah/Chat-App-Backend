@@ -1,4 +1,4 @@
-const {friends} = require('../models');
+const {friends, users} = require('../models');
 
 const friendRepository = {
     // Get all friends
@@ -17,10 +17,20 @@ const friendRepository = {
 
     // Get one friend by userid
     getFriendByUserId : async (userid) => {
-        return await friends.findOne({
+        return await users.findOne({
+            include: [{
+                model: users,
+                as: 'friend_list',
+                attributes : {
+                    exclude : ['password', 'createdAt', 'updatedAt', 'friends']
+                }
+            }],
             where: {
-                userid: userid
-            }
+                id: userid
+            },
+            order: [
+                ['friend_list', 'username', 'ASC']
+            ]
         });
     },
 
